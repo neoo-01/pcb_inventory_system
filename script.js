@@ -2,11 +2,11 @@ let components = JSON.parse(localStorage.getItem("components")) || [];
 let pcbItems = [];
 
 function showSection(id) {
-  document.querySelectorAll(".section").forEach(sec => sec.style.display = "none");
+  document.querySelectorAll(".section").forEach(s => s.style.display = "none");
   document.getElementById(id).style.display = "block";
 }
 
-function saveComponents() {
+function save() {
   localStorage.setItem("components", JSON.stringify(components));
 }
 
@@ -16,35 +16,54 @@ function addComponent() {
   let stock = parseInt(document.getElementById("stock").value);
   let min = parseInt(document.getElementById("min").value);
 
+  if (!name || isNaN(stock) || isNaN(min)) {
+    alert("Fill all fields");
+    return;
+  }
+
   components.push({ name, part, stock, min });
-  saveComponents();
-  displayComponents();
+  save();
+  renderComponents();
   updateDropdown();
+
+  document.getElementById("cname").value = "";
+  document.getElementById("part").value = "";
+  document.getElementById("stock").value = "";
+  document.getElementById("min").value = "";
 }
 
-function displayComponents() {
+function renderComponents() {
   let list = document.getElementById("componentList");
   list.innerHTML = "";
 
-  components.forEach(c => {
+  components.forEach((c, i) => {
     let li = document.createElement("li");
-    li.innerHTML = `${c.name} (Stock: ${c.stock}) 
-    ${c.stock < c.min ? "<span class='low'>LOW</span>" : ""}`;
+    let low = c.stock < c.min ? " <span class='low'>LOW</span>" : "";
+    li.innerHTML = `${c.name} (Stock: ${c.stock}) ${low}
+      <button onclick="deleteComponent(${i})">Delete</button>`;
     list.appendChild(li);
   });
 
-  updateDashboard();
+  document.getElementById("totalComp").textContent = components.length;
+  document.getElementById("lowStock").textContent =
+    components.filter(c => c.stock < c.min).length;
+}
+
+function deleteComponent(i) {
+  components.splice(i, 1);
+  save();
+  renderComponents();
+  updateDropdown();
 }
 
 function updateDropdown() {
   let select = document.getElementById("componentSelect");
   select.innerHTML = "";
-
-  components.forEach((c, index) => {
-    let option = document.createElement("option");
-    option.value = index;
-    option.text = c.name;
-    select.appendChild(option);
+  components.forEach((c, i) => {
+    let opt = document.createElement("option");
+    opt.value = i;
+    opt.textContent = c.name;
+    select.appendChild(opt);
   });
 }
 
@@ -52,12 +71,23 @@ function addToPCB() {
   let index = document.getElementById("componentSelect").value;
   let qty = parseInt(document.getElementById("qty").value);
 
-  pcbItems.push({ index, qty });
+  if (index === "" || isNaN(qty)) {
+    alert("Select component and quantity");
+    return;
+  }
 
+  pcbItems.push({ index: parseInt(index), qty });
+  renderPCB();
+}
+
+function renderPCB() {
   let list = document.getElementById("pcbItems");
-  let li = document.createElement("li");
-  li.textContent = components[index].name + " x " + qty;
-  list.appendChild(li);
+  list.innerHTML = "";
+  pcbItems.forEach(item => {
+    let li = document.createElement("li");
+    li.textContent = components[item.index].name + " x " + item.qty;
+    list.appendChild(li);
+  });
 }
 
 function producePCB() {
@@ -65,18 +95,14 @@ function producePCB() {
     components[item.index].stock -= item.qty;
   });
 
-  saveComponents();
-  displayComponents();
-  alert("PCB Produced, stock updated");
+  pcbItems = [];
+  renderPCB();
+  save();
+  renderComponents();
+
+  alert("PCB Produced");
 }
 
-function updateDashboard() {
-  document.getElementById("totalComp").textContent = components.length;
-
-  let low = components.filter(c => c.stock < c.min).length;
-  document.getElementById("lowStock").textContent = low;
-}
-
-// load on start
-displayComponents();
+// initial load
+renderComponents();
 updateDropdown();

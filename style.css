@@ -1,15 +1,32 @@
 body {
   font-family: Arial;
   padding: 20px;
+  background: #f4f6f8;
 }
 
-.tabs button {
-  margin-right: 10px;
+h1 {
+  text-align: center;
+  background: #2b6cb0;
+  color: white;
   padding: 10px;
 }
 
+.tabs {
+  text-align: center;
+  margin: 10px 0;
+}
+
+.tabs button {
+  padding: 8px 12px;
+  margin: 5px;
+  cursor: pointer;
+}
+
 .section {
-  margin-top: 20px;
+  background: white;
+  padding: 15px;
+  margin-top: 10px;
+  border-radius: 8px;
 }
 
 .low {
