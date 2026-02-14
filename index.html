@@ -1,51 +1,102 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+  <meta charset="UTF-8">
   <title>PCB Inventory System</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
 
-<h1>PCB Inventory Management</h1>
+<header>
+  <h1>PCB Inventory Management</h1>
+</header>
 
-<div class="tabs">
-  <button onclick="showSection('components')">Components</button>
-  <button onclick="showSection('pcb')">PCB Builder</button>
-  <button onclick="showSection('dashboard')">Dashboard</button>
-</div>
+<nav class="tabs">
+  <button class="tab-btn active" data-target="components">Components</button>
+  <button class="tab-btn" data-target="pcb">PCB Builder</button>
+  <button class="tab-btn" data-target="dashboard">Dashboard</button>
+  <button class="tab-btn" data-target="customize">Customize</button>
+</nav>
 
-<!-- COMPONENT SECTION -->
-<div id="components" class="section">
+<main>
+
+<section id="components" class="section active">
   <h2>Add Component</h2>
-  <input id="cname" placeholder="Component Name">
-  <input id="part" placeholder="Part Number">
-  <input id="stock" type="number" placeholder="Stock">
-  <input id="min" type="number" placeholder="Min Threshold">
-  <button onclick="addComponent()">Add Component</button>
+  <div class="form-row">
+    <input id="cname" placeholder="Component Name">
+    <input id="part" placeholder="Part Number">
+    <input id="stockInput" type="number" placeholder="Stock">
+    <input id="minInput" type="number" placeholder="Min Threshold">
+    <button onclick="addComponent()">Add Component</button>
+  </div>
 
   <h3>Component List</h3>
-  <ul id="componentList"></ul>
-</div>
+  <ul id="componentList" class="list"></ul>
 
-<!-- PCB SECTION -->
-<div id="pcb" class="section" style="display:none">
+  <div class="csv-row">
+    <h3>Excel / CSV</h3>
+    <input type="file" id="csvInput" accept=".csv">
+    <button onclick="importCSV()">Import CSV</button>
+    <button onclick="exportCSV()">Export CSV</button>
+  </div>
+</section>
+
+<section id="pcb" class="section">
   <h2>PCB Builder</h2>
-  <select id="componentSelect"></select>
-  <input id="qty" type="number" placeholder="Quantity per PCB">
-  <button onclick="addToPCB()">Add to PCB</button>
+  <div class="form-row">
+    <select id="componentSelect"></select>
+    <input id="qtyInput" type="number" placeholder="Quantity">
+    <button onclick="addToPCB()">Add</button>
+    <button onclick="clearPCB()">Clear</button>
+  </div>
 
-  <h3>PCB Items</h3>
-  <ul id="pcbItems"></ul>
+  <ul id="pcbList" class="list"></ul>
+  <button class="big-btn" onclick="producePCB()">Produce PCB</button>
+</section>
 
-  <button onclick="producePCB()">Produce PCB</button>
-</div>
-
-<!-- DASHBOARD -->
-<div id="dashboard" class="section" style="display:none">
+<section id="dashboard" class="section">
   <h2>Dashboard</h2>
-  <p>Total Components: <span id="totalComp"></span></p>
-  <p>Low Stock Items: <span id="lowStock"></span></p>
-</div>
+  <div class="cards">
+    <div class="card">
+      <h3>Total Components</h3>
+      <p id="totalComp">0</p>
+    </div>
+    <div class="card">
+      <h3>Low Stock</h3>
+      <p id="lowStock">0</p>
+    </div>
+  </div>
+</section>
+
+<section id="customize" class="section">
+  <h2>Customize Theme</h2>
+
+  <div class="form-row">
+    <label>Primary</label>
+    <input type="color" id="primaryColor" value="#0ea5a4">
+
+    <label>Secondary</label>
+    <input type="color" id="secondaryColor" value="#0284c7">
+
+    <label>Background</label>
+    <input type="color" id="bgColor" value="#0f172a">
+  </div>
+
+  <div class="form-row">
+    <button onclick="applyTheme()">Apply Theme</button>
+    <button onclick="resetTheme()">Reset Default</button>
+  </div>
+</section>
+
+</main>
+
+
+<audio id="clickSound" src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_401d9c8f3c.mp3"></audio>
+<audio id="successSound" src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_6c68c0a6b1.mp3"></audio>
 
 <script src="script.js"></script>
 </body>
