@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>PCB Inventory System</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<h1>PCB Inventory Management</h1>
+
+<div class="tabs">
+  <button onclick="showSection('components')">Components</button>
+  <button onclick="showSection('pcb')">PCB Builder</button>
+  <button onclick="showSection('dashboard')">Dashboard</button>
+</div>
+
+<!-- COMPONENT SECTION -->
+<div id="components" class="section">
+  <h2>Add Component</h2>
+  <input id="cname" placeholder="Component Name">
+  <input id="part" placeholder="Part Number">
+  <input id="stock" type="number" placeholder="Stock">
+  <input id="min" type="number" placeholder="Min Threshold">
+  <button onclick="addComponent()">Add Component</button>
+
+  <h3>Component List</h3>
+  <ul id="componentList"></ul>
+</div>
+
+<!-- PCB SECTION -->
+<div id="pcb" class="section" style="display:none">
+  <h2>Create PCB</h2>
+  <input id="pcbname" placeholder="PCB Name">
+
+  <select id="componentSelect"></select>
+  <input id="qty" type="number" placeholder="Quantity per PCB">
+  <button onclick="addToPCB()">Add to PCB</button>
+
+  <h3>PCB Items</h3>
+  <ul id="pcbItems"></ul>
+
+  <button onclick="producePCB()">Produce PCB</button>
+</div>
+
+<!-- DASHBOARD -->
+<div id="dashboard" class="section" style="display:none">
+  <h2>Dashboard</h2>
+  <p>Total Components: <span id="totalComp"></span></p>
+  <p>Low Stock Items: <span id="lowStock"></span></p>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>

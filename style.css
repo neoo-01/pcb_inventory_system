@@ -1,0 +1,18 @@
+body {
+  font-family: Arial;
+  padding: 20px;
+}
+
+.tabs button {
+  margin-right: 10px;
+  padding: 10px;
+}
+
+.section {
+  margin-top: 20px;
+}
+
+.low {
+  color: red;
+  font-weight: bold;
+}
